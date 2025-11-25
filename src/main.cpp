@@ -2,8 +2,8 @@
 #include <iostream>
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    LOG_INFO("Start Server");
+  std::cout << "Hello, World!" << std::endl;
+  LOG_INFO("Start Server");
 
-    return 0;
+  return 0;
 }

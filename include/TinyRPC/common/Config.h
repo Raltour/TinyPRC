@@ -5,10 +5,13 @@
 
 class Config {
 public:
-  Config();
+  static Config& get_instance();
 
   std::string server_host_;
   int server_port_;
+
+private:
+  Config();
 };
 
 

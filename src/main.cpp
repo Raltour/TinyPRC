@@ -6,7 +6,7 @@ int main() {
   std::cout << "Hello, World!" << std::endl;
   LOG_INFO("Start Server");
 
-  Config config;
+  Config::get_instance();
 
   return 0;
 }

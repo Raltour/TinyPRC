@@ -1,9 +1,15 @@
 #include "TinyRPC/common/Config.h"
-#include "tinyxml2/tinyxml2.h"
 #include "TinyRPC/common/ConsoleLogger.h"
+
+#include "tinyxml2/tinyxml2.h"
 
 #include <iostream>
 
+
+Config& Config::get_instance() {
+  static Config config;
+  return config;
+}
 
 Config::Config() {
   tinyxml2::XMLDocument doc;

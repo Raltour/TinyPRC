@@ -17,7 +17,7 @@ target_include_directories(tinyxml2 PUBLIC ${PROJECT_SOURCE_DIR}/third_party/tin
 # -------- TinyRPC --------
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-file(GLOB_RECURSE SOURCES "src/*.cpp")
+file(GLOB_RECURSE SOURCES "src/*.cc")
 
 add_executable(RPC ${SOURCES})
 

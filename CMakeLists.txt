@@ -18,4 +18,6 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 add_executable(RPC ${SOURCES})
-target_link_libraries(tinyxml2)
+
+target_include_directories(RPC PUBLIC ${PROJECT_SOURCE_DIR}/third_party)
+target_link_libraries(RPC tinyxml2)

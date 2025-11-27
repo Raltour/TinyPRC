@@ -1,4 +1,9 @@
 .idea/
 cmake-build-debug-wsl-ubuntu/
+
+.vs/
+out/
+CmakeSettings.json
+
 bin/
 lib/

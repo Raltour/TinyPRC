@@ -6,12 +6,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <assert.h>
-#include <unistd.h>
-#include <errno.h>
 #include <string.h>
 #include <fcntl.h>
-#include <stdlib.h>
 
 Acceptor::Acceptor(const char* ip, int port) {
   struct sockaddr_in address;
@@ -32,21 +28,39 @@ Acceptor::Acceptor(const char* ip, int port) {
     return;
   }
 
-}
-
-void Acceptor::set_new_connection_callback(std::function<int()> callback) {
-  new_connection_callback_ = callback;
-}
-
-void Acceptor::listen_loop() {
-  while (true) {
+  listen_channel = Channel(listenfd_, true, false);
+  listen_channel.set_handle_read([this] {
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
     int connfd = accept(listenfd_, (struct sockaddr *) &client_addr, &client_addr_len);
     if (connfd < 0) {
       LOG_ERROR("accept failure");
+      return;
     }
 
-    new_connection_callback_();
-  }
+    this->new_connection_callback_(connfd);
+  });
+
+
 }
+
+void Acceptor::set_new_connection_callback(std::function<void(int)> callback) {
+  new_connection_callback_ = callback;
+}
+
+void Acceptor::set_start_listen_callback(std::function<void(Channel*)> callback) {
+  start_listen_callback_ = callback;
+}
+
+// void Acceptor::listen_loop() {
+//   while (true) {
+//     struct sockaddr_in client_addr;
+//     socklen_t client_addr_len = sizeof(client_addr);
+//     int connfd = accept(listenfd_, (struct sockaddr *) &client_addr, &client_addr_len);
+//     if (connfd < 0) {
+//       LOG_ERROR("accept failure");
+//       return;
+//     }
+//     new_connection_callback_();
+//   }
+// }

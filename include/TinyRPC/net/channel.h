@@ -10,6 +10,8 @@ class Channel {
 public:
   Channel(const int fd, bool read_event, bool write_event);
 
+  Channel() {};
+
   // int fd_; // 放到epoll中进行监听的文件描述符
   // unsigned int events_; // 用于记录该channel应当监听的类型
   // unsigned int return_events_; // 实际可执行的事件类型, 由Poller来修改

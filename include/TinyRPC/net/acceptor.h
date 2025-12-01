@@ -6,14 +6,21 @@
 class Acceptor {
 public:
   Acceptor(const char* ip, int port);
-  void set_new_connection_callback(std::function<int()> callback);
-  void listen_loop();
+
+  Acceptor();
+
+  void set_new_connection_callback(std::function<void(int)> callback);
+
+  void set_start_listen_callback(std::function<void(Channel*)> callback);
+
+  // void listen_loop();
 
 private:
   int listenfd_;
-  std::function<int()> new_connection_callback_;
+  std::function<void(int)> new_connection_callback_;
+  std::function<void(Channel*)> start_listen_callback_;
 
-  Channel* listen_channel();
+  Channel listen_channel;
 };
 
 

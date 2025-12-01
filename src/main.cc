@@ -8,5 +8,7 @@ int main() {
 
   TcpServer server;
 
+  server.RunLoop();
+
   return 0;
 }

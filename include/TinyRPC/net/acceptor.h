@@ -15,10 +15,10 @@ public:
 
 private:
   int listenfd_;
+  Channel listen_channel;
+
   std::function<void(int)> new_connection_callback_;
   std::function<void(Channel*)> start_listen_callback_;
-
-  Channel listen_channel;
 };
 
 

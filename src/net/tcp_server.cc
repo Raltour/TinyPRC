@@ -7,6 +7,12 @@ TcpServer::TcpServer() {
     LOG_DEBUG("Acceptor called listen_callback");
     event_loop_.AddChannel(channel);
   });
+
+  acceptor_.set_new_connection_callback([this](int connect_fd) {
+    fd_connection_map_.insert({
+      connect_fd,
+      std::make_unique<TcpConnection>(connect_fd)});
+  });
 }
 
 void TcpServer::RunLoop() {

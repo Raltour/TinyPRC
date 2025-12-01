@@ -16,13 +16,13 @@ Config::Config() {
 
   tinyxml2::XMLError error = doc.LoadFile("../conf/tinyrpc.xml");
   if (error != tinyxml2::XML_SUCCESS) {
-    std::cout << "Error: " << doc.ErrorStr() << std::endl;
+    LOG_ERROR("Error: " + std::string(doc.ErrorStr()));
     return;
   }
 
   tinyxml2::XMLElement* root = doc.FirstChildElement("root");
   if (!root) {
-    std::cout << "No <root>.\n";
+    LOG_ERROR("No <root>.\n");
     return;
   }
 

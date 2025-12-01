@@ -1,4 +1,4 @@
-#define MAX_LISTEN = 64
+#define MAX_LISTEN 64
 
 #include "TinyRPC/net/acceptor.h"
 #include "TinyRPC/common/console_logger.h"
@@ -32,6 +32,7 @@ Acceptor::Acceptor() {
     return;
   }
 
+
   listen_channel = Channel(listenfd_, true, false);
   listen_channel.set_handle_read([this] {
     struct sockaddr_in client_addr;
@@ -43,9 +44,13 @@ Acceptor::Acceptor() {
       return;
     }
 
+    LOG_INFO("New connection");
     this->new_connection_callback_(connfd);
   });
 
+
+  LOG_INFO("Start listen");
+  ret = listen(listenfd_, MAX_LISTEN);
 }
 
 void Acceptor::set_new_connection_callback(std::function<void(int)> callback) {

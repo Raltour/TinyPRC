@@ -14,7 +14,8 @@ public:
   Poller();
 
   int poll(int timeout);
-  void register_channel(Channel& channel);
+
+  void register_channel(Channel* channel);
 
 private:
   // std::vector<epoll_event> return_events_;

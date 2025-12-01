@@ -18,9 +18,11 @@ public:
   // void HandleEvent();
 
   void set_handle_read(std::function<void()> read_callback);
+
   void set_handle_write(std::function<void()> write_callback);
 
   void read_callback();
+
   void write_callback();
 
 private:

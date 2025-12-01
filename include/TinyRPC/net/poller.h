@@ -13,7 +13,7 @@ class Poller {
 public:
   Poller();
 
-  void poll(int timeout);
+  int poll(int timeout);
   void register_channel(Channel& channel);
 
 private:

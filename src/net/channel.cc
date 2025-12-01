@@ -1,11 +1,12 @@
 #include "TinyRPC/net/channel.h"
 
-Channel::Channel(const int fd, bool read_event, bool write_event): fd_(fd), events_(0) {
+Channel::Channel(const int fd, bool read_event, bool write_event) {
+  event_.data.fd = fd;
   if (read_event) {
-    events_|= EPOLLIN;
+    event_.events = EPOLLIN;
   }
   if (write_event) {
-    events_|= EPOLLOUT;
+    event_.events |= EPOLLOUT;
   }
 }
 
@@ -25,7 +26,7 @@ void Channel::set_handle_write(std::function<void()> write_callback) {
   handle_write_ = write_callback;
 }
 
-void Channel::read_callback_() {
+void Channel::read_callback() {
   this->handle_read_();
 }
 

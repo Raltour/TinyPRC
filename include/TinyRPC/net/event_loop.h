@@ -9,6 +9,8 @@ public:
 
   void Loop();
 
+  void AddChannel(Channel* channel);
+
 private:
   Poller poller_;
 

@@ -27,3 +27,7 @@ void EventLoop::Loop() {
     }
   }
 }
+
+void EventLoop::AddChannel(Channel* channel) {
+  poller_.register_channel(channel);
+}

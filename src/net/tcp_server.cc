@@ -10,8 +10,8 @@ TcpServer::TcpServer() {
 
   acceptor_.set_new_connection_callback([this](int connect_fd) {
     fd_connection_map_.insert({
-      connect_fd,
-      std::make_unique<TcpConnection>(connect_fd)});
+        connect_fd,
+        std::make_unique<TcpConnection>(connect_fd)});
   });
 }
 

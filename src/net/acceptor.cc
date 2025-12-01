@@ -26,7 +26,7 @@ Acceptor::Acceptor() {
     return;
   }
 
-  int ret = bind(listenfd_, (struct sockaddr *) &address, sizeof(address));
+  int ret = bind(listenfd_, (struct sockaddr*)&address, sizeof(address));
   if (ret < 0) {
     LOG_ERROR("bind listen_fd failure");
     return;
@@ -36,7 +36,8 @@ Acceptor::Acceptor() {
   listen_channel.set_handle_read([this] {
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
-    int connfd = accept(listenfd_, (struct sockaddr *) &client_addr, &client_addr_len);
+    int connfd = accept(listenfd_, (struct sockaddr*)&client_addr,
+                        &client_addr_len);
     if (connfd < 0) {
       LOG_ERROR("accept failure");
       return;
@@ -45,14 +46,14 @@ Acceptor::Acceptor() {
     this->new_connection_callback_(connfd);
   });
 
-
 }
 
 void Acceptor::set_new_connection_callback(std::function<void(int)> callback) {
   new_connection_callback_ = callback;
 }
 
-void Acceptor::set_start_listen_callback(std::function<void(Channel*)> callback) {
+void Acceptor::set_start_listen_callback(
+    std::function<void(Channel*)> callback) {
   start_listen_callback_ = callback;
 }
 

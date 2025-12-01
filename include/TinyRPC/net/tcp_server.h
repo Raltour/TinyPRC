@@ -8,15 +8,17 @@
 #include <memory>
 
 class TcpServer {
- public:
+public:
   TcpServer();
+
   void RunLoop();
+
   void AddChannel(Channel* channel);
 
- private:
+private:
   EventLoop event_loop_;
   Acceptor acceptor_;
-  std::map<int, std::unique_ptr<TcpConnection>>  fd_connection_map_;
+  std::map<int, std::unique_ptr<TcpConnection> > fd_connection_map_;
 
   std::function<void()> reactor_read_;
   std::function<void()> reactor_write_;

@@ -23,3 +23,7 @@ add_executable(RPC ${SOURCES})
 
 target_include_directories(RPC PUBLIC ${PROJECT_SOURCE_DIR}/third_party)
 target_link_libraries(RPC tinyxml2)
+
+
+# -------- TestClient --------
+add_executable(TestClient ${PROJECT_SOURCE_DIR}/test/test_client.cc)

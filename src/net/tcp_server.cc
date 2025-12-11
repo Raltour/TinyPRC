@@ -3,23 +3,21 @@
 #include "TinyRPC/common/console_logger.h"
 
 
-
-TcpServer::TcpServer(std::function<void()> Service)
-  : reactor_read_(Service), reactor_write_(Service) {
+TcpServer::TcpServer(std::function<void()> service)
+  : service_(service) {
 
   acceptor_.set_start_listen_callback([this](Channel* channel) {
-              LOG_DEBUG("Acceptor called listen_callback");
-              event_loop_.AddChannel(channel);
-            }
-            );
-
+        LOG_DEBUG("Acceptor called listen_callback");
+        event_loop_.AddChannel(channel);
+      }
+      );
 
   acceptor_.set_new_connection_callback(
-      [this, Service](int connect_fd) {
+      [this, service](int connect_fd) {
         fd_connection_map_.insert({
             connect_fd,
             std::make_unique<TcpConnection>(
-                connect_fd, Service, Service,
+                connect_fd, service,
                 [this](Channel* channel) {
                   event_loop_.AddChannel(channel);
                 })});

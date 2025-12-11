@@ -5,31 +5,21 @@
 
 class TcpConnection {
 public:
-  TcpConnection(int connect_fd, std::function<void()> read_callback,
-                std::function<void()> write_callback,
+  TcpConnection(int connect_fd, std::function<void()> service,
                 std::function<void(Channel*)> add_connection_callback);
 
   TcpConnection() = delete;
 
-  // void set_add_connection_callback(std::function<void(Channel*)> callback);
-
-  // void set_read_task_callback(std::function<void()> callback);
-
-  // void set_write_task_callback(std::function<void()> callback);
-
-
 private:
   Channel channel_;
 
-  void set_work(std::function<void()> read_callback,
-                std::function<void()> write_callback,
-                std::function<void(Channel*)> add_connection_callback);
+  void HandleRead();
 
+  void HandleWrite();
+
+  std::function<void()> service_;
   std::function<void(Channel*)> add_connection_callback_;
 
-  // std::function<void()> read_task_callback_;
-
-  // std::function<void()> write_task_callback_;
 };
 
 

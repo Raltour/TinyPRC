@@ -9,7 +9,7 @@
 
 class TcpServer {
 public:
-  TcpServer(std::function<void()> Service);
+  TcpServer(std::function<void()> service);
 
   TcpServer() = delete;
 
@@ -20,8 +20,7 @@ public:
 private:
   EventLoop event_loop_;
 
-  std::function<void()> reactor_read_;
-  std::function<void()> reactor_write_;
+  std::function<void()> service_;
 
   Acceptor acceptor_;
   std::map<int, std::unique_ptr<TcpConnection> > fd_connection_map_;

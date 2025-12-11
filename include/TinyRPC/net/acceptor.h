@@ -5,17 +5,13 @@
 
 class Acceptor {
 public:
-  // Acceptor(){};
+  Acceptor();
 
-  Acceptor(std::function<void(Channel*)>, std::function<void(int)>);
+  void StartListen();
 
-  Acceptor() = delete;
+  void set_new_connection_callback(std::function<void(int)> callback);
 
-  // void set_new_connection_callback(std::function<void(int)> callback);
-
-  // void set_start_listen_callback(std::function<void(Channel*)> callback);
-
-  // void listen_loop();
+  void set_start_listen_callback(std::function<void(Channel*)> callback);
 
 private:
   int listenfd_;

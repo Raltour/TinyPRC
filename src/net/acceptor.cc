@@ -10,11 +10,9 @@
 #include <string.h>
 #include <fcntl.h>
 
-Acceptor::Acceptor(std::function<void(Channel*)> start_listen_callback_,
-                   std::function<void(int)> new_connection_callback)
-  : start_listen_callback_(start_listen_callback_),
-    new_connection_callback_(new_connection_callback) {
+Acceptor::Acceptor() {}
 
+void Acceptor::StartListen() {
   const char* ip = Config::GetInstance().server_host_.c_str();
   int port = Config::GetInstance().server_port_;
 
@@ -62,14 +60,14 @@ Acceptor::Acceptor(std::function<void(Channel*)> start_listen_callback_,
   this->start_listen_callback_(&listen_channel);
 }
 
-// void Acceptor::set_new_connection_callback(std::function<void(int)> callback) {
-//   new_connection_callback_ = callback;
-// }
+void Acceptor::set_new_connection_callback(std::function<void(int)> callback) {
+  new_connection_callback_ = callback;
+}
 
-// void Acceptor::set_start_listen_callback(
-//     std::function<void(Channel*)> callback) {
-//   start_listen_callback_ = callback;
-// }
+void Acceptor::set_start_listen_callback(
+    std::function<void(Channel*)> callback) {
+  start_listen_callback_ = callback;
+}
 
 // void Acceptor::listen_loop() {
 //   while (true) {

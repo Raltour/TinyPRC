@@ -2,9 +2,10 @@
 
 #include "TinyRPC/common/console_logger.h"
 
-TcpServer::TcpServer(std::function<void()> reactor_read,
-                     std::function<void()> reactor_write)
-  : reactor_read_(reactor_read), reactor_write_(reactor_write) {
+
+
+TcpServer::TcpServer(std::function<void()> Service)
+  : reactor_read_(Service), reactor_write_(Service) {
 
   acceptor_.set_start_listen_callback([this](Channel* channel) {
               LOG_DEBUG("Acceptor called listen_callback");
@@ -12,14 +13,13 @@ TcpServer::TcpServer(std::function<void()> reactor_read,
             }
             );
 
-  acceptor_.StartListen();
 
   acceptor_.set_new_connection_callback(
-      [this, reactor_read, reactor_write](int connect_fd) {
+      [this, Service](int connect_fd) {
         fd_connection_map_.insert({
             connect_fd,
             std::make_unique<TcpConnection>(
-                connect_fd, reactor_read, reactor_write,
+                connect_fd, Service, Service,
                 [this](Channel* channel) {
                   event_loop_.AddChannel(channel);
                 })});
@@ -29,6 +29,8 @@ TcpServer::TcpServer(std::function<void()> reactor_read,
               connect_fd
             ));
       });
+
+  acceptor_.StartListen();
 }
 
 void TcpServer::RunLoop() {

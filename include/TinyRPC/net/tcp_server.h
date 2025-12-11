@@ -9,10 +9,7 @@
 
 class TcpServer {
 public:
-  // TcpServer();
-
-  TcpServer(std::function<void()> reactor_read,
-            std::function<void()> reactor_write);
+  TcpServer(std::function<void()> Service);
 
   TcpServer() = delete;
 

@@ -5,13 +5,10 @@ int main() {
   LOG_INFO("Start Server");
 
   TcpServer server(
-      []() {
-        return;
-      },
-      []() {
-        return;
-      }
-      );
+    [] () {
+      LOG_DEBUG("Reactor Service");
+    }
+  );
 
   server.RunLoop();
 

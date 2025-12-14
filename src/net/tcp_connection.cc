@@ -41,7 +41,6 @@ void TcpConnection::HandleRead() {
       input_buffer_.RetrieveData(decoded_data.size() + 4);
       std::string response_data;
       service_(decoded_data, response_data);
-      LOG_DEBUG(response_data);
       std::string encoded_data = Codec::encode(response_data);
       output_buffer_.WriteData(encoded_data, encoded_data.size());
       while (!output_buffer_.SendFd(channel_.event()->data.fd)) {}

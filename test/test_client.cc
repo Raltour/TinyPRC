@@ -31,28 +31,14 @@ int main() {
     printf("error!\n");
   }
 
-  // const char* message = "Hello, TinyRPC!";
-  // std::string message = "Hello, TinyRPC!";
-  // std::string encoded_message = Codec::encode(message);
-  // for (int i = 0; i < 10; i++) {
-  //   send(sockfd, encoded_message.data(), encoded_message.size(), 0);
-  // }
-  //
-  // for (int i = 0; i < 10; i++) {
-  //   char buffer[1024];
-  //   int read_size = recv(sockfd, buffer, 1024, 0);
-  //   buffer[read_size] = '\0';
-  //   std::cout << "Received from server: " << buffer + 4 << std::endl;
-  // }
-
   int arg1 = 5;
   int arg2 = 6;
   rpc::Request request;
   request.set_request_id(1);
   request.set_method_name("add");
   rpc::AddMethod add_method;
-  add_method.set_arg1(5);
-  add_method.set_arg2(6);
+  add_method.set_arg1(arg1);
+  add_method.set_arg2(arg2);
   add_method.set_ret1(0);
   request.set_method_args(add_method.SerializeAsString());
   std::string message = request.SerializeAsString();

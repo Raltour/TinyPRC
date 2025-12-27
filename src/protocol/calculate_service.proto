@@ -13,6 +13,16 @@ message AddResponse {
   int32 result = 1;
 }
 
-service AddService {
+message SubRequest {
+  int32 a = 1;
+  int32 b = 2;
+}
+
+message SubResponse {
+  int32 result = 1;
+}
+
+service CalculateService {
   rpc Add(AddRequest) returns(AddResponse);
+  rpc Sub(SubRequest) returns(SubResponse);
 }

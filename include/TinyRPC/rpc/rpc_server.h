@@ -7,6 +7,7 @@
 #include "TinyRPC/net/tcp_server.h"
 #include "TinyRPC/protocol/rpc_message.pb.h"
 
+// TODO: implement a tcp_client to maintain the tcp connection for better performance
 class RpcServer {
 public:
   RpcServer();

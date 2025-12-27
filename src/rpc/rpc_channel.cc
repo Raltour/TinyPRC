@@ -19,7 +19,6 @@ void RpcChannel::CallMethod(const google::protobuf::MethodDescriptor* method,
                             const google::protobuf::Message* request,
                             google::protobuf::Message* response,
                             google::protobuf::Closure* done) {
-  // TODO: implement a tcp_client to maintain the tcp connection for better performance
   const char* ip = "127.0.0.1";
   int port = 12345;
 
@@ -40,8 +39,8 @@ void RpcChannel::CallMethod(const google::protobuf::MethodDescriptor* method,
   rpc::RpcMessage rpc_message;
   rpc_message.set_id(1);
   rpc_message.set_type(rpc::RPC_TYPE_REQUEST);
-  rpc_message.set_service_name("AddService");
-  rpc_message.set_method_name("Add");
+  rpc_message.set_service_name(method->service()->name());
+  rpc_message.set_method_name(method->name());
   rpc_message.set_request(request->SerializeAsString());
   std::string message = rpc_message.SerializeAsString();
 

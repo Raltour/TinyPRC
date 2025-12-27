@@ -51,7 +51,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 }  // namespace rpc
 static ::_pb::Metadata file_level_metadata_add_5fservice_2eproto[2];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_add_5fservice_2eproto = nullptr;
-static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_add_5fservice_2eproto = nullptr;
+static const ::_pb::ServiceDescriptor* file_level_service_descriptors_add_5fservice_2eproto[1];
 
 const uint32_t TableStruct_add_5fservice_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
@@ -84,11 +84,11 @@ const char descriptor_table_protodef_add_5fservice_2eproto[] PROTOBUF_SECTION_VA
   "\n\021add_service.proto\022\003rpc\"\"\n\nAddRequest\022\t"
   "\n\001a\030\001 \001(\005\022\t\n\001b\030\002 \001(\005\"\035\n\013AddResponse\022\016\n\006r"
   "esult\030\001 \001(\00526\n\nAddService\022(\n\003Add\022\017.rpc.A"
-  "ddRequest\032\020.rpc.AddResponseb\006proto3"
+  "ddRequest\032\020.rpc.AddResponseB\003\200\001\001b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_add_5fservice_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_add_5fservice_2eproto = {
-    false, false, 155, descriptor_table_protodef_add_5fservice_2eproto,
+    false, false, 160, descriptor_table_protodef_add_5fservice_2eproto,
     "add_service.proto",
     &descriptor_table_add_5fservice_2eproto_once, nullptr, 0, 2,
     schemas, file_default_instances, TableStruct_add_5fservice_2eproto::offsets,
@@ -490,6 +490,93 @@ void AddResponse::InternalSwap(AddResponse* other) {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_add_5fservice_2eproto_getter, &descriptor_table_add_5fservice_2eproto_once,
       file_level_metadata_add_5fservice_2eproto[1]);
+}
+
+// ===================================================================
+
+AddService::~AddService() {}
+
+const ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor* AddService::descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_add_5fservice_2eproto);
+  return file_level_service_descriptors_add_5fservice_2eproto[0];
+}
+
+const ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor* AddService::GetDescriptor() {
+  return descriptor();
+}
+
+void AddService::Add(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
+                         const ::rpc::AddRequest*,
+                         ::rpc::AddResponse*,
+                         ::google::protobuf::Closure* done) {
+  controller->SetFailed("Method Add() not implemented.");
+  done->Run();
+}
+
+void AddService::CallMethod(const ::PROTOBUF_NAMESPACE_ID::MethodDescriptor* method,
+                             ::PROTOBUF_NAMESPACE_ID::RpcController* controller,
+                             const ::PROTOBUF_NAMESPACE_ID::Message* request,
+                             ::PROTOBUF_NAMESPACE_ID::Message* response,
+                             ::google::protobuf::Closure* done) {
+  GOOGLE_DCHECK_EQ(method->service(), file_level_service_descriptors_add_5fservice_2eproto[0]);
+  switch(method->index()) {
+    case 0:
+      Add(controller,
+             ::PROTOBUF_NAMESPACE_ID::internal::DownCast<const ::rpc::AddRequest*>(
+                 request),
+             ::PROTOBUF_NAMESPACE_ID::internal::DownCast<::rpc::AddResponse*>(
+                 response),
+             done);
+      break;
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      break;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message& AddService::GetRequestPrototype(
+    const ::PROTOBUF_NAMESPACE_ID::MethodDescriptor* method) const {
+  GOOGLE_DCHECK_EQ(method->service(), descriptor());
+  switch(method->index()) {
+    case 0:
+      return ::rpc::AddRequest::default_instance();
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      return *::PROTOBUF_NAMESPACE_ID::MessageFactory::generated_factory()
+          ->GetPrototype(method->input_type());
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message& AddService::GetResponsePrototype(
+    const ::PROTOBUF_NAMESPACE_ID::MethodDescriptor* method) const {
+  GOOGLE_DCHECK_EQ(method->service(), descriptor());
+  switch(method->index()) {
+    case 0:
+      return ::rpc::AddResponse::default_instance();
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      return *::PROTOBUF_NAMESPACE_ID::MessageFactory::generated_factory()
+          ->GetPrototype(method->output_type());
+  }
+}
+
+AddService_Stub::AddService_Stub(::PROTOBUF_NAMESPACE_ID::RpcChannel* channel)
+  : channel_(channel), owns_channel_(false) {}
+AddService_Stub::AddService_Stub(
+    ::PROTOBUF_NAMESPACE_ID::RpcChannel* channel,
+    ::PROTOBUF_NAMESPACE_ID::Service::ChannelOwnership ownership)
+  : channel_(channel),
+    owns_channel_(ownership == ::PROTOBUF_NAMESPACE_ID::Service::STUB_OWNS_CHANNEL) {}
+AddService_Stub::~AddService_Stub() {
+  if (owns_channel_) delete channel_;
+}
+
+void AddService_Stub::Add(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
+                              const ::rpc::AddRequest* request,
+                              ::rpc::AddResponse* response,
+                              ::google::protobuf::Closure* done) {
+  channel_->CallMethod(descriptor()->method(0),
+                       controller, request, response, done);
 }
 
 // @@protoc_insertion_point(namespace_scope)

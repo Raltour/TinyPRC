@@ -2,6 +2,21 @@
 #include "TinyRPC/protocol/rpc_message.pb.h"
 #include "TinyRPC/protocol/add_service.pb.h"
 
+class AddServiceImpl : public rpc::AddService {
+ public:
+
+  ~AddServiceImpl() override;
+
+  void Add(google::protobuf::RpcController* controller,
+           const rpc::AddRequest* request, rpc::AddResponse* response,
+           google::protobuf::Closure* done) override {
+    response->set_result(request->a() + request->b());
+
+    done->Run();
+  }
+
+};
+
 std::string add(std::string arguments) {
   rpc::AddRequest add_request;
   add_request.ParseFromString(arguments);

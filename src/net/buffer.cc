@@ -49,7 +49,7 @@ std::string Buffer::PeekData() const {
 }
 
 bool Buffer::RetrieveData(int size) {
-  if (data_size_ <= size) {
+  if (data_size_ >= size) {
     read_index_ = (read_index_ + size) % buffer_->size();
     data_size_ -= size;
     return true;

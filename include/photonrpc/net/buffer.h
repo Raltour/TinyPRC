@@ -13,7 +13,7 @@ class Buffer {
   std::string PeekData() const;
 
   // Retrieve data from read_index_ to read_index + size.
-  std::string RetrieveData(int size);
+  bool RetrieveData(int size);
 
   bool ReceiveFd(int fd);
 

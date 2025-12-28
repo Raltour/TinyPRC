@@ -31,7 +31,6 @@ void TcpConnection::HandleRead() {
   if (input_buffer_.ReceiveFd(channel_.event()->data.fd)) {
     LOG_DEBUG("TcpConnection received data");
     std::string decoded_data;
-    // TODO: Design better API of Codec and Buffer.
     while ((decoded_data = Codec::decode(input_buffer_.PeekData(),
                                          input_buffer_.GetSize()))
                .size() > 0) {

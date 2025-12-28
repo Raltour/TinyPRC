@@ -4,13 +4,21 @@
 
 Buffer::Buffer() : read_index_(0), write_index_(0), data_size_(0) {
   buffer_ = std::make_unique<std::vector<char>>();
-  // TODO: make better use of memory in buffer.
+  // TODO: There is some bug if I change the initial size of buffer from 1024 to 64.
   buffer_->resize(1024);
 }
 
 void Buffer::WriteData(std::string& data, int size) {
-  if (size > static_cast<int>(buffer_->size()) - write_index_ + read_index_) {
-    buffer_->resize(buffer_->size() * 2);
+  if (size > static_cast<int>(buffer_->size()) - data_size_) {
+    int original_size_index = buffer_->size();
+    buffer_->resize(original_size_index * 2);
+    if (write_index_ < read_index_) {
+      for (auto iter = buffer_->begin(); iter != buffer_->begin() + write_index_; ++iter) {
+        buffer_->at(original_size_index) = *iter;
+        original_size_index++;
+      }
+      write_index_ = original_size_index;
+    }
   }
   std::vector<char>::iterator iter = buffer_->begin() + write_index_;
   for (int i = 0; i < size; ++i) {
@@ -25,39 +33,29 @@ void Buffer::WriteData(std::string& data, int size) {
 }
 
 std::string Buffer::PeekData() const {
-  int size = this->data_size_;
   std::string data;
   auto iter = buffer_->begin() + read_index_;
-  for (int i = 0; i < size; ++i) {
+  for (int i = 0; i < data_size_; ++i) {
     if (iter == buffer_->end()) {
       iter = buffer_->begin();
     }
-    if (iter == buffer_->begin() + write_index_) {
-      return "";
-    }
+    // if (iter == buffer_->begin() + write_index_) {
+    //   return "";
+    // }
     data.push_back(*iter);
     ++iter;
   }
   return data;
 }
 
-std::string Buffer::RetrieveData(int size) {
-  std::string data;
-  auto iter = buffer_->begin() + read_index_;
-  for (int i = 0; i < size; ++i) {
-    if (iter == buffer_->end()) {
-      iter = buffer_->begin();
-    }
-    if (iter == buffer_->begin() + write_index_) {
-      return "";
-    }
-    data.push_back(*iter);
-    ++iter;
+bool Buffer::RetrieveData(int size) {
+  if (data_size_ <= size) {
+    read_index_ = (read_index_ + size) % buffer_->size();
+    data_size_ -= size;
+    return true;
+  } else {
+    return false;
   }
-  read_index_ = (read_index_ + size) % buffer_->size();
-  data_size_ -= size;
-  // return "";
-  return data;
 }
 
 bool Buffer::ReceiveFd(int fd) {
@@ -73,7 +71,9 @@ bool Buffer::ReceiveFd(int fd) {
 }
 
 bool Buffer::SendFd(int fd) {
-  std::string temp = this->RetrieveData(((write_index_ - read_index_) % buffer_->size() + buffer_->size()) % buffer_->size());
+  std::string temp = this->PeekData();
+  this->RetrieveData(data_size_);
+  // std::string temp = this->RetrieveData(((write_index_ - read_index_) % buffer_->size() + buffer_->size()) % buffer_->size());
   // int send_size = send(fd, buffer_->data() + read_index_, GetSize(), 0);
   int send_size = send(fd, temp.data(), temp.size(), 0);
   // read_index_ += send_size;

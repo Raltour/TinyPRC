@@ -27,11 +27,12 @@ int main() {
   sub_request.set_b(arg2);
 
   echo_service_stub.Echo(nullptr, &echo_request, &echo_response, nullptr);
-  calculate_service_stub.Add(nullptr, &add_request, &add_response, nullptr);
-  calculate_service_stub.Sub(nullptr, &sub_request, &sub_response, nullptr);
-
   std::cout << "Received from server: " << echo_response.result() << std::endl;
+
+  calculate_service_stub.Add(nullptr, &add_request, &add_response, nullptr);
   std::cout << "Received from server: " << add_response.result() << std::endl;
+
+  calculate_service_stub.Sub(nullptr, &sub_request, &sub_response, nullptr);
   std::cout << "Received from server: " << sub_response.result() << std::endl;
 
   return 0;

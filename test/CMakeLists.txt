@@ -8,3 +8,11 @@ target_link_libraries(TestClient PRIVATE photonrpc)
 # -------- TestServer --------
 add_executable(TestServer ${PROJECT_SOURCE_DIR}/test/test_server.cc ${PROTO_SOURCES}  ${PROJECT_SOURCE_DIR}/src/protocol/rpc_message.pb.cc)
 target_link_libraries(TestServer PRIVATE photonrpc)
+
+# -------- TestBuffer --------
+add_executable(TestBuffer test_buffer.cc)
+target_link_libraries(TestBuffer PRIVATE photonrpc GTest::gtest_main)
+
+#include(GoogleTest)
+#gtest_discover_tests(TestBuffer)
+add_test(NAME TestBuffer COMMAND TestBuffer)

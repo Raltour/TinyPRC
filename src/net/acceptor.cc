@@ -28,10 +28,17 @@ void Acceptor::StartListen() {
     return;
   }
 
+  // Enable the bind function to reuse the same port.
+  // In some case, the socket haven't been released by the Linux OS, but the server run again.
+  int opt = 1;
+  if (setsockopt(listenfd_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+    LOG_ERROR("setsockopt failure");
+  }
+
   int ret = bind(listenfd_, (struct sockaddr*)&address, sizeof(address));
   if (ret < 0) {
-    LOG_ERROR("bind listen_fd failure");
-    return;
+    LOG_ERROR("bind listen_fd failure, errno = " + std::string(strerror(errno)));
+    exit(1);
   }
 
   ret = listen(listenfd_, MAX_LISTEN);

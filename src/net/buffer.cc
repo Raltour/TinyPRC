@@ -4,11 +4,10 @@
 
 Buffer::Buffer() : read_index_(0), write_index_(0), data_size_(0) {
   buffer_ = std::make_unique<std::vector<char>>();
-  // TODO: There is some bug if I change the initial size of buffer from 1024 to 64.
   buffer_->resize(1024);
 }
 
-Buffer::Buffer(int init_size) {
+Buffer::Buffer(int init_size) : read_index_(0), write_index_(0), data_size_(0) {
   buffer_ = std::make_unique<std::vector<char>>();
   buffer_->resize(init_size);
 }
@@ -44,9 +43,6 @@ std::string Buffer::PeekData() const {
     if (iter == buffer_->end()) {
       iter = buffer_->begin();
     }
-    // if (iter == buffer_->begin() + write_index_) {
-    //   return "";
-    // }
     data.push_back(*iter);
     ++iter;
   }
@@ -78,10 +74,7 @@ bool Buffer::ReceiveFd(int fd) {
 bool Buffer::SendFd(int fd) {
   std::string temp = this->PeekData();
   this->RetrieveData(data_size_);
-  // std::string temp = this->RetrieveData(((write_index_ - read_index_) % buffer_->size() + buffer_->size()) % buffer_->size());
-  // int send_size = send(fd, buffer_->data() + read_index_, GetSize(), 0);
   int send_size = send(fd, temp.data(), temp.size(), 0);
-  // read_index_ += send_size;
   if (send_size > 0) {
     std::string remain_data = temp.substr(send_size);
     this->WriteData(remain_data, remain_data.size());

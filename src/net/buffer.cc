@@ -13,7 +13,7 @@ Buffer::Buffer(int init_size) : read_index_(0), write_index_(0), data_size_(0) {
 }
 
 void Buffer::WriteData(std::string& data, int size) {
-  if (size > static_cast<int>(buffer_->size()) - data_size_) {
+  while (size >= static_cast<int>(buffer_->size()) - data_size_) {
     int original_size_index = buffer_->size();
     buffer_->resize(original_size_index * 2);
     if (write_index_ < read_index_) {

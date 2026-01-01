@@ -22,6 +22,9 @@ add_library(tinyxml2 STATIC ${PROJECT_SOURCE_DIR}/third_party/tinyxml2/tinyxml2.
 
 target_include_directories(tinyxml2 PUBLIC ${PROJECT_SOURCE_DIR}/third_party/tinyxml2)
 
+# -------- Spdlog 库 --------
+add_subdirectory(third_party/spdlog)
+
 # -------- Google-Test 库 --------
 enable_testing()
 

@@ -1,5 +1,5 @@
 #include "photonrpc/net/poller.h"
-#include "photonrpc/common/console_logger.h"
+#include "photonrpc/common/logger.h"
 
 Poller::Poller() {
   this->epoll_fd_ = epoll_create(MAX_EVENT_NUMBER);

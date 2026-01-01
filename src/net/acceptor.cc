@@ -2,7 +2,7 @@
 
 #include "photonrpc/net/acceptor.h"
 #include "photonrpc/common/config.h"
-#include "photonrpc/common/console_logger.h"
+#include "photonrpc/common/logger.h"
 
 #include <arpa/inet.h>
 #include <fcntl.h>
@@ -37,7 +37,8 @@ void Acceptor::StartListen() {
 
   int ret = bind(listenfd_, (struct sockaddr*)&address, sizeof(address));
   if (ret < 0) {
-    LOG_ERROR("bind listen_fd failure, errno = " + std::string(strerror(errno)));
+    LOG_ERROR("bind listen_fd failure, errno = " +
+              std::string(strerror(errno)));
     exit(1);
   }
 

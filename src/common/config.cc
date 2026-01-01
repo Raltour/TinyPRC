@@ -1,5 +1,5 @@
 #include "photonrpc/common/config.h"
-#include "photonrpc/common/console_logger.h"
+#include "photonrpc/common/logger.h"
 
 #include "tinyxml2/tinyxml2.h"
 

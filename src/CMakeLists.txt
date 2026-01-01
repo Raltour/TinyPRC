@@ -6,6 +6,6 @@ file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cc)
 
 add_library(photonrpc STATIC ${SOURCES})
 
-target_include_directories(photonrpc PUBLIC ${PROJECT_SOURCE_DIR}/third_party)
+target_include_directories(photonrpc PUBLIC ${PROJECT_SOURCE_DIR}/third_party ${PROJECT_SOURCE_DIR}/third_party/spdlog/include)
 
 target_link_libraries(photonrpc PRIVATE tinyxml2 protobuf::libprotobuf spdlog)

@@ -1,11 +1,11 @@
 #include "photonrpc/net/event_loop.h"
-#include "photonrpc/common/console_logger.h"
-#include <unistd.h>
 #include <sys/eventfd.h>
+#include <unistd.h>
 #include <csignal>
+#include "photonrpc/common/logger.h"
 
 namespace {
-  EventLoop* event_loop = nullptr;
+EventLoop* event_loop = nullptr;
 }
 
 void stop_signal_handler(int sig) {
@@ -26,7 +26,7 @@ EventLoop::EventLoop() : stopped_(false) {
     LOG_DEBUG("Read from wakeup_fd_, size: " + std::to_string(ret));
     LOG_INFO("Signal: Stoping Loop");
     stopped_ = true;
-    });
+  });
 
   this->AddChannel(wakeup_channel);
 

@@ -1,12 +1,15 @@
 #include "photonrpc/rpc/rpc_server.h"
-#include "photonrpc/common/console_logger.h"
+#include "photonrpc/common/logger.h"
 #include "photonrpc/protocol/rpc_message.pb.h"
 
 RpcServer::RpcServer()
     : tcp_server_([this](std::string& read, std::string& write) {
         LOG_DEBUG("Reactor Service");
         this->HandleRequest(read, write);
-      }) {}
+      }) {
+  // Initialize logger singleton
+  Logger::GetInstance();
+}
 
 void RpcServer::StartServer() {
   LOG_DEBUG("Start Server");

@@ -1,5 +1,5 @@
 #include "photonrpc/net/tcp_connection.h"
-#include "photonrpc/common/console_logger.h"
+#include "photonrpc/common/logger.h"
 #include "photonrpc/net/codec.h"
 
 #include <unistd.h>

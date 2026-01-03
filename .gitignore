@@ -1,10 +1,12 @@
 .idea/
-cmake-build-debug-wsl-ubuntu/
-
+.vscode/
 .vs/
+
+cmake-build-debug-wsl-ubuntu/
 out/
-CmakeSettings.json
+build/
 
 bin/
 lib/
-build/
+
+CmakeSettings.json

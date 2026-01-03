@@ -222,7 +222,7 @@ class TestHelper:
         try:
             # 切换到正确的目录以确保配置文件路径正确
             test_dir = os.path.dirname(os.path.abspath(__file__))
-            project_root = os.path.dirname(test_dir)
+            project_root = os.path.dirname(os.path.dirname(test_dir))
             server_full_path = os.path.join(project_root, server_path)
             
             if not os.path.exists(server_full_path):
@@ -529,7 +529,7 @@ def run_all_tests():
     
     # 查找服务器程序
     test_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(test_dir)
+    project_root = os.path.dirname(os.path.dirname(test_dir))
     server_path = os.path.join(project_root, "bin", "TestProvider")
     
     if not os.path.exists(server_path):

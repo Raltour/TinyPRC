@@ -12,9 +12,9 @@ class Config {
   std::string server_host() const { return GetString("server", "host"); }
   int server_port() const { return GetInt("server", "port"); }
 
-  int config_level() const { return GetInt("config", "level"); }
-  int config_queue_size() const { return GetInt("config", "queue_size"); }
-  int config_thread_num() const { return GetInt("config", "thread_num"); }
+  int log_level() const { return GetInt("log", "level"); }
+  int log_queue_size() const { return GetInt("log", "queue_size"); }
+  int log_thread_num() const { return GetInt("log", "thread_num"); }
 
  private:
   Config(const std::string& config_path = "../conf/photonrpc.xml");

@@ -4,7 +4,7 @@
 Logger::Logger() {
   // 初始化异步日志的线程池
   // 参数：队列大小=8192，后台线程数=1
-  spdlog::init_thread_pool(Config::GetInstance().config_queue_size(), Config::GetInstance().config_thread_num());
+  spdlog::init_thread_pool(Config::GetInstance().log_queue_size(), Config::GetInstance().log_thread_num());
 
   // 创建彩色控制台sink
   auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
@@ -21,7 +21,7 @@ Logger::Logger() {
   spdlog::set_default_logger(logger);
 
   // 设置日志级别
-  spdlog::set_level(static_cast<spdlog::level::level_enum>(Config::GetInstance().config_level()));
+  spdlog::set_level(static_cast<spdlog::level::level_enum>(Config::GetInstance().log_level()));
 
   // 立即刷新日志（对于错误级别）
   spdlog::flush_on(spdlog::level::err);

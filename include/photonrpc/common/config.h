@@ -15,6 +15,8 @@ class Config {
   int log_level() const { return GetInt("log", "level"); }
   int log_queue_size() const { return GetInt("log", "queue_size"); }
   int log_thread_num() const { return GetInt("log", "thread_num"); }
+  std::string log_file_path() const { return GetString("log", "file_path"); }
+  bool log_truncate() const { return GetString("log", "trucate") == "true"; }
 
  private:
   Config(const std::string& config_path = "../conf/photonrpc.xml");

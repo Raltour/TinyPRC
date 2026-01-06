@@ -21,3 +21,7 @@ target_link_libraries(TestCodec PRIVATE photonrpc GTest::gtest_main)
 #gtest_discover_tests(TestBuffer)
 add_test(NAME TestBuffer COMMAND TestBuffer)
 add_test(NAME TestCodec COMMAND TestCodec)
+
+# ---------- Benchmark ----------
+add_executable(Benchmark benchmark.cc ${PROTO_SOURCES})
+target_link_libraries(Benchmark PRIVATE photonrpc)

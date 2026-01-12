@@ -9,13 +9,11 @@
 
 class TcpServer {
  public:
-  TcpServer(std::function<void(std::string&, std::string&)> service);
+  TcpServer() = default;
 
-  TcpServer() = delete;
+  void SetUpTcpServer(std::function<void(std::string&, std::string&)> service);
 
   void RunLoop();
-
-  void AddChannel(Channel* channel);
 
  private:
   EventLoop event_loop_;

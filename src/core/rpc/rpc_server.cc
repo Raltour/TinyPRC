@@ -1,12 +1,13 @@
 #include "rpc_server.h"
 #include "../common/logger.h"
 
-RpcServer::RpcServer()
-    : tcp_server_([this](std::string& read, std::string& write) {
-        this->HandleRequest(read, write);
-      }) {
+RpcServer::RpcServer() {
   // Initialize logger singleton
   Logger::GetInstance();
+
+  tcp_server_.SetUpTcpServer([this](std::string& read, std::string& write) {
+    this->HandleRequest(read, write);
+  });
 }
 
 void RpcServer::StartServer() {

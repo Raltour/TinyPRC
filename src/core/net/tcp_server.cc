@@ -2,8 +2,8 @@
 
 #include "../common/logger.h"
 
-TcpServer::TcpServer(std::function<void(std::string&, std::string&)> service) {
-
+void TcpServer::SetUpTcpServer(
+    std::function<void(std::string&, std::string&)> service) {
   acceptor_.set_start_listen_callback([this](Channel* channel) {
     LOG_DEBUG("Acceptor called listen_callback");
     event_loop_.AddChannel(channel);
@@ -28,8 +28,4 @@ TcpServer::TcpServer(std::function<void(std::string&, std::string&)> service) {
 
 void TcpServer::RunLoop() {
   event_loop_.Loop();
-}
-
-void TcpServer::AddChannel(Channel* channel) {
-  event_loop_.AddChannel(channel);
 }

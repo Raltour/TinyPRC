@@ -2,11 +2,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/protocol)
 file(GLOB PROTO_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/protocol/*.cc)
 
 # -------- TestConsumer --------
-add_executable(TestConsumer ${PROJECT_SOURCE_DIR}/test/consumer.cc ${PROTO_SOURCES} ${PROJECT_SOURCE_DIR}/src/protocol/rpc_message.pb.cc)
+add_executable(TestConsumer ${PROJECT_SOURCE_DIR}/test/consumer.cc ${PROTO_SOURCES} ../src/core/rpc/rpc_message.pb.cc)
 target_link_libraries(TestConsumer PRIVATE photonrpc)
 
 # -------- TestProvide --------
-add_executable(TestProvider ${PROJECT_SOURCE_DIR}/test/provider.cc ${PROTO_SOURCES}  ${PROJECT_SOURCE_DIR}/src/protocol/rpc_message.pb.cc)
+add_executable(TestProvider ${PROJECT_SOURCE_DIR}/test/provider.cc ${PROTO_SOURCES} ../src/core/rpc/rpc_message.pb.cc)
 target_link_libraries(TestProvider PRIVATE photonrpc)
 
 # -------- TestBuffer --------

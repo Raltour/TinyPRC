@@ -1,8 +1,8 @@
-#include "photonrpc/net/event_loop.h"
+#include "event_loop.h"
 #include <sys/eventfd.h>
 #include <unistd.h>
 #include <csignal>
-#include "photonrpc/common/logger.h"
+#include "../common/logger.h"
 
 namespace {
 EventLoop* event_loop = nullptr;

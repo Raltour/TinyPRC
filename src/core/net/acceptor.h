@@ -1,7 +1,7 @@
 #ifndef PHOTONRPC_ACCEPTOR_H
 #define PHOTONRPC_ACCEPTOR_H
 
-#include "photonrpc/net/event_loop.h"
+#include "event_loop.h"
 
 class Acceptor {
  public:

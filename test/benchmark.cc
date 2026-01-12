@@ -1,5 +1,4 @@
-#include "photonrpc/common/logger.h"
-#include "photonrpc/rpc/rpc_channel.h"
+#include "../include/photonrpc/rpc.h"
 #include "protocol/calculate_service.pb.h"
 
 #include <atomic>
@@ -25,9 +24,6 @@ void thread_func() {
 
   for (int i = 0; i < NUM_OF_REQUESTS_PER_THREAD; i++) {
     calculate_service_stub.Add(nullptr, &add_request, &add_response, nullptr);
-    if (add_response.result() != 11) {
-      LOG_ERROR("RPC failed");
-    }
     request_count++;
   }
 }

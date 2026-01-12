@@ -1,8 +1,8 @@
-#include <iostream>
-
+#include "../include/photonrpc/rpc.h"
 #include "calculate_service.pb.h"
 #include "echo_service.pb.h"
-#include "photonrpc/rpc/rpc_channel.h"
+
+#include <iostream>
 
 int main() {
   RpcChannel channel;

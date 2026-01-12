@@ -1,6 +1,6 @@
-#include "photonrpc/net/tcp_connection.h"
-#include "photonrpc/common/logger.h"
-#include "photonrpc/net/codec.h"
+#include "tcp_connection.h"
+#include "../common/logger.h"
+#include "codec.h"
 
 #include <unistd.h>
 
@@ -39,7 +39,8 @@ void TcpConnection::HandleRead() {
       decoded_data.clear();
     }
   } else {
-    LOG_INFO("TcpConnection(fd:{}) closed", static_cast<int>(channel_.event()->data.fd));
+    LOG_INFO("TcpConnection(fd:{}) closed",
+             static_cast<int>(channel_.event()->data.fd));
     close(channel_.event()->data.fd);
   }
 }

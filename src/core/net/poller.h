@@ -4,7 +4,7 @@
 #define MAX_EVENT_NUMBER 16
 
 #include <sys/epoll.h>
-#include "photonrpc/net/channel.h"
+#include "channel.h"
 
 #include <map>
 #include <vector>

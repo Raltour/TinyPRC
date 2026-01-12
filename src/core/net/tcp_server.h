@@ -1,9 +1,9 @@
 #ifndef PHOTONRPC_TCP_SERVER_H
 #define PHOTONRPC_TCP_SERVER_H
 
-#include "photonrpc/net/acceptor.h"
-#include "photonrpc/net/event_loop.h"
-#include "photonrpc/net/tcp_connection.h"
+#include "acceptor.h"
+#include "event_loop.h"
+#include "tcp_connection.h"
 
 #include <memory>
 

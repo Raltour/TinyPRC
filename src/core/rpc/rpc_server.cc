@@ -1,6 +1,5 @@
-#include "photonrpc/rpc/rpc_server.h"
-#include "photonrpc/common/logger.h"
-#include "photonrpc/protocol/rpc_message.pb.h"
+#include "rpc_server.h"
+#include "../common/logger.h"
 
 RpcServer::RpcServer()
     : tcp_server_([this](std::string& read, std::string& write) {
@@ -32,7 +31,7 @@ void RpcServer::HandleRequest(std::string& request, std::string& response) {
     response_message.set_response("Invalid request");
     response_message.SerializeToString(&response);
     return;
-  } 
+  }
 
   auto service = service_map_.find(request_message.service_name())->second;
   auto service_desc = service->GetDescriptor();
@@ -82,8 +81,7 @@ bool RpcServer::CheckRequest(rpc::RpcMessage request) {
   // }
 
   auto service_desc = service->GetDescriptor();
-  auto method_desc =
-      service_desc->FindMethodByName(request.method_name());
+  auto method_desc = service_desc->FindMethodByName(request.method_name());
   if (method_desc == nullptr) {
     LOG_ERROR("Method not found: " + request.method_name());
     return false;

@@ -1,4 +1,4 @@
-#include "photonrpc/net/buffer.h"
+#include "buffer.h"
 
 #include <sys/socket.h>
 
@@ -17,7 +17,8 @@ void Buffer::WriteData(std::string& data, int size) {
     int original_size_index = buffer_->size();
     buffer_->resize(original_size_index * 2);
     if (write_index_ < read_index_) {
-      for (auto iter = buffer_->begin(); iter != buffer_->begin() + write_index_; ++iter) {
+      for (auto iter = buffer_->begin();
+           iter != buffer_->begin() + write_index_; ++iter) {
         buffer_->at(original_size_index) = *iter;
         original_size_index++;
       }
@@ -83,7 +84,6 @@ bool Buffer::SendFd(int fd) {
   } else {
     return false;
   }
-
 }
 
 int Buffer::GetSize() const {

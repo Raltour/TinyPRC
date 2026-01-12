@@ -6,7 +6,6 @@
 #include <spdlog/async.h>
 #include <spdlog/spdlog.h>
 
-
 class Logger {
  public:
   // 单例模式：保证全局只有一个日志管理器

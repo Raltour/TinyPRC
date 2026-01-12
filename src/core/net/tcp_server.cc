@@ -1,6 +1,6 @@
-#include "photonrpc/net/tcp_server.h"
+#include "tcp_server.h"
 
-#include "photonrpc/common/logger.h"
+#include "../common/logger.h"
 
 TcpServer::TcpServer(std::function<void(std::string&, std::string&)> service) {
 

@@ -24,8 +24,7 @@ class Buffer {
 
   int GetSize() const;
 
-
-private:
+ private:
   int read_index_;
   int write_index_;
   int data_size_;

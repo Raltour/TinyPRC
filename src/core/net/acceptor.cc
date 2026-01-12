@@ -1,8 +1,8 @@
 #define MAX_LISTEN 64
 
-#include "photonrpc/net/acceptor.h"
-#include "photonrpc/common/config.h"
-#include "photonrpc/common/logger.h"
+#include "net/acceptor.h"
+#include "common/config.h"
+#include "common/logger.h"
 
 #include <arpa/inet.h>
 #include <fcntl.h>

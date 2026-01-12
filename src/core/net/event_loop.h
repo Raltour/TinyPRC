@@ -1,7 +1,7 @@
 #ifndef PHOTONRPC_EVENT_LOOP_H
 #define PHOTONRPC_EVENT_LOOP_H
 
-#include "photonrpc/net/poller.h"
+#include "poller.h"
 
 class EventLoop {
  public:

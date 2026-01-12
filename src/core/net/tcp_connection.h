@@ -1,8 +1,8 @@
 #ifndef PHOTONRPC_TCP_CONNECTION_H
 #define PHOTONRPC_TCP_CONNECTION_H
 
-#include "photonrpc/net/buffer.h"
-#include "photonrpc/net/channel.h"
+#include "buffer.h"
+#include "net/channel.h"
 
 #include <string>
 

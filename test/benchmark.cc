@@ -7,7 +7,7 @@
 #include <iostream>
 #include <thread>
 
-#define NUM_OF_THREADS 16
+#define NUM_OF_THREADS 8
 #define NUM_OF_REQUESTS_PER_THREAD 1000
 
 std::atomic<int> request_count(0);

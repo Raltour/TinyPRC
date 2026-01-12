@@ -48,9 +48,9 @@ void RpcServer::HandleRequest(std::string& request, std::string& response) {
 
   rpc::RpcMessage response_message;
   response_message.set_id(request_message.id());
-  request_message.set_type(rpc::RPC_TYPE_RESPONSE);
-  request_message.set_response(method_response->SerializeAsString());
-  request_message.SerializeToString(&response);
+  response_message.set_type(rpc::RPC_TYPE_RESPONSE);
+  response_message.set_response(method_response->SerializeAsString());
+  response_message.SerializeToString(&response);
 
   LOG_DEBUG("Send response: \n" + response_message.DebugString());
 }

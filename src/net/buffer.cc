@@ -73,11 +73,12 @@ bool Buffer::ReceiveFd(int fd) {
 
 bool Buffer::SendFd(int fd) {
   std::string temp = this->PeekData();
-  this->RetrieveData(data_size_);
+  // this->RetrieveData(data_size_);
   int send_size = send(fd, temp.data(), temp.size(), 0);
   if (send_size > 0) {
-    std::string remain_data = temp.substr(send_size);
-    this->WriteData(remain_data, remain_data.size());
+    // std::string remain_data = temp.substr(send_size);
+    // this->WriteData(remain_data, remain_data.size());
+    this->RetrieveData(send_size);
     return true;
   } else {
     return false;

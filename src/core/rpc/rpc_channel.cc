@@ -1,7 +1,7 @@
 #include "rpc_channel.h"
+#include "photonrpc/rpc_message.pb.h"
 #include "../common/config.h"
 #include "../net/codec.h"
-#include "rpc_message.pb.h"
 
 #include <arpa/inet.h>
 #include <assert.h>

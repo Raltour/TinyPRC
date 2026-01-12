@@ -4,6 +4,11 @@
 
 void TcpServer::SetUpTcpServer(
     std::function<void(std::string&, std::string&)> service) {
+TcpServer::TcpServer(std::function<void(std::string&, std::string&)> service) {
+
+  Logger::init_file("rpc", "logs/");
+  Logger::init_rotating_file("photonlogger", "logs/rpc", 1, 1);
+
   acceptor_.set_start_listen_callback([this](Channel* channel) {
     // LOG_DEBUG("Acceptor called listen_callback");
     event_loop_.AddChannel(channel);

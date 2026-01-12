@@ -40,6 +40,8 @@ void Acceptor::StartListen() {
   int ret = bind(listenfd_, (struct sockaddr*)&address, sizeof(address));
   if (ret < 0) {
     // LOG_ERROR("bind listen_fd failure, errno = " +
+              // std::string(strerror(errno)));
+    // LOG_ERROR("bind listen_fd failure, errno = " +
     //           std::string(strerror(errno)));
     exit(1);
   }
@@ -63,6 +65,9 @@ void Acceptor::StartListen() {
       return;
     }
 
+    // LOG_INFO("Acceptor accepted new connection from {}:{}, fd: {}",
+             // inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port),
+             // connfd);
     // LOG_INFO("Acceptor accepted new connection from {}:{}, fd: {}",
     //          inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port),
     //          connfd);

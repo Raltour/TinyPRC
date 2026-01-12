@@ -3,7 +3,8 @@
 
 RpcServer::RpcServer() {
   // Initialize logger singleton
-  Logger::GetInstance();
+  // Logger::GetInstance();
+  // Logger::GetInstance();
 
   tcp_server_.SetUpTcpServer([this](std::string& read, std::string& write) {
     this->HandleRequest(read, write);
@@ -59,6 +60,7 @@ void RpcServer::HandleRequest(std::string& request, std::string& response) {
   response_message.set_response(method_response->SerializeAsString());
   response_message.SerializeToString(&response);
 
+  // LOG_DEBUG("Send response: \n" + response_message.DebugString());
   delete method_request;
   delete method_response;
 

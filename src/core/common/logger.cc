@@ -1,38 +1,87 @@
 #include "logger.h"
-#include "config.h"
 
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include "spdlog/sinks/basic_file_sink.h"
+std::shared_ptr<spdlog::logger> Logger::logger_;
 
-Logger::Logger() {
-  // 初始化异步日志的线程池
-  // 参数：队列大小=8192，后台线程数=1
-  spdlog::init_thread_pool(Config::GetInstance().log_queue_size(),
-                           Config::GetInstance().log_thread_num());
+void Logger::ensure_thread_pool(size_t async_queue_size, size_t async_threads) {
+  // init_thread_pool 只能初始化一次；重复会抛异常。
+  // 做法：如果默认线程池不存在，就初始化；否则复用。
+  if (!spdlog::thread_pool()) {
+    spdlog::init_thread_pool(async_queue_size, async_threads);
+  }
+}
 
-  // 创建彩色控制台sink
-  auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+void Logger::init_file(const std::string& logger_name,
+                       const std::string& file_path,
+                       spdlog::level::level_enum level,
+                       size_t async_queue_size,
+                       size_t async_threads,
+                       spdlog::level::level_enum flush_on_level) {
+  ensure_thread_pool(async_queue_size, async_threads);
 
-  auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
-      Config::GetInstance().log_file_path(),
-      Config::GetInstance().log_truncate());
+  auto sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(file_path, /*truncate=*/false);
 
-  // 设置日志格式：[时间] [级别] 消息 (文件:行号)
-  console_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] %v (%s:%#)");
+  logger_ = std::make_shared<spdlog::async_logger>(
+      logger_name,
+      spdlog::sinks_init_list{sink},
+      spdlog::thread_pool(),
+      spdlog::async_overflow_policy::block // 队列满时阻塞，避免丢日志
+  );
 
-  // 创建异步logger
-  auto logger = std::make_shared<spdlog::async_logger>(
-      "photonrpc_logger",
-      // console_sink,
-      file_sink, spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+  logger_->set_level(level);
+  logger_->flush_on(flush_on_level);
 
-  // 设置为默认logger
-  spdlog::set_default_logger(logger);
+  // 可选：默认 pattern（你也可以通过 set_pattern 改）
+  logger_->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%t] [%^%l%$] %v");
 
-  // 设置日志级别
-  spdlog::set_level(static_cast<spdlog::level::level_enum>(
-      Config::GetInstance().log_level()));
+  spdlog::set_default_logger(logger_);
+}
 
-  // 立即刷新日志（对于错误级别）
-  spdlog::flush_on(spdlog::level::err);
+void Logger::init_rotating_file(const std::string& logger_name,
+                                const std::string& file_path,
+                                size_t max_file_size,
+                                size_t max_files,
+                                spdlog::level::level_enum level,
+                                size_t async_queue_size,
+                                size_t async_threads,
+                                spdlog::level::level_enum flush_on_level) {
+  ensure_thread_pool(async_queue_size, async_threads);
+
+  auto sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
+      file_path, max_file_size, max_files, /*rotate_on_open=*/false);
+
+  logger_ = std::make_shared<spdlog::async_logger>(
+      logger_name,
+      spdlog::sinks_init_list{sink},
+      spdlog::thread_pool(),
+      spdlog::async_overflow_policy::block
+  );
+
+  logger_->set_level(level);
+  logger_->flush_on(flush_on_level);
+  logger_->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%t] [%^%l%$] %v");
+
+  spdlog::set_default_logger(logger_);
+}
+
+std::shared_ptr<spdlog::logger> Logger::get() {
+  // 允许你在 init 前调用：返回默认 logger（可能为空）
+  if (logger_) return logger_;
+  return spdlog::default_logger();
+}
+
+void Logger::set_level(spdlog::level::level_enum level) {
+  if (auto lg = get()) lg->set_level(level);
+}
+
+void Logger::set_pattern(const std::string& pattern) {
+  if (auto lg = get()) lg->set_pattern(pattern);
+}
+
+void Logger::flush() {
+  if (auto lg = get()) lg->flush();
+}
+
+void Logger::shutdown() {
+  logger_.reset();
+  spdlog::shutdown();
 }

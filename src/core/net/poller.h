@@ -23,11 +23,11 @@ class Poller {
 
   Channel* get_channel_by_fd(int fd);
 
+  int epoll_fd_;
  private:
   // std::vector<epoll_event> return_events_;
   epoll_event return_events_[MAX_EVENT_NUMBER];
   std::map<int, Channel*> fd_channel_map_;
-  int epoll_fd_;
 };
 
 #endif  //PHOTONRPC_POLLER_H

@@ -48,12 +48,17 @@ void EventLoop::Loop() {
       int event_flag = result[i].events;
       Channel* channel = poller_.get_channel_by_fd(sockfd);
 
-      if (event_flag & EPOLLIN) {
-        channel->HandleRead();
+      if (channel != nullptr) {
+        if (event_flag & EPOLLIN) {
+          channel->HandleRead();
+        }
+        if (event_flag & EPOLLOUT) {
+          channel->HandleWrite();
+        }
+      } else {
+        epoll_ctl(poller_.epoll_fd_ /*拿不到就加个接口*/, EPOLL_CTL_DEL, sockfd, nullptr);
       }
-      if (event_flag & EPOLLOUT) {
-        channel->HandleWrite();
-      }
+
     }
   }
   // LOG_INFO("EventLoop finish looping");

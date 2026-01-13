@@ -1,43 +1,37 @@
-#ifndef PHOTONRPC_LOGGER_H
-#define PHOTONRPC_LOGGER_H
+#pragma once
 
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
+#include "common/config.h"
 
-#include <spdlog/async.h>
+#include <string>
 #include <spdlog/spdlog.h>
 
 class Logger {
- public:
-  // 单例模式：保证全局只有一个日志管理器
-  static Logger& GetInstance() {
-    static Logger instance;
-    return instance;
-  }
+public:
 
-  // 禁止拷贝
-  Logger(const Logger&) = delete;
-  Logger& operator=(const Logger&) = delete;
+  static void InitFromConfig(const Config& config);
 
-  // 设置日志级别
-  void SetLogLevel(spdlog::level::level_enum level) {
-    spdlog::set_level(level);
-  }
+  /**
+   * @brief 初始化全局 spdlog 环境（异步）
+   *
+   * @param log_dir     日志目录
+   * @param log_name    日志文件名（如 app.log）
+   * @param level       全局日志级别
+   * @param max_file_mb 单个日志文件最大大小（MB）
+   * @param max_files   最大滚动文件数
+   * @param to_console  是否同时输出到控制台
+   */
+  static void Init(const std::string& log_dir,
+                   const std::string& log_name,
+                   spdlog::level::level_enum level = spdlog::level::info,
+                   size_t max_file_mb = 100,
+                   size_t max_files = 10,
+                   bool to_console = true);
 
-  // 获取底层spdlog logger
-  std::shared_ptr<spdlog::logger> GetLogger() {
-    return spdlog::default_logger();
-  }
+  /**
+   * @brief 刷新并关闭日志系统（可选）
+   */
+  static void Shutdown();
 
- private:
-  Logger();
-  ~Logger() { spdlog::shutdown(); }
+private:
+  Logger() = delete;
 };
-
-// 定义宏，自动填入文件名和行号
-// 使用spdlog的格式化日志宏
-// #define LOG_DEBUG(...) SPDLOG_DEBUG(__VA_ARGS__)
-// #define LOG_INFO(...) SPDLOG_INFO(__VA_ARGS__)
-// #define LOG_WARN(...) SPDLOG_WARN(__VA_ARGS__)
-// #define LOG_ERROR(...) SPDLOG_ERROR(__VA_ARGS__)
-
-#endif  // PHOTONRPC_LOGGER_H

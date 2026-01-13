@@ -3,7 +3,7 @@
 
 RpcServer::RpcServer() {
   // Initialize logger singleton
-  Logger::GetInstance();
+  // Logger::GetInstance();
 
   tcp_server_.SetUpTcpServer([this](std::string& read, std::string& write) {
     this->HandleRequest(read, write);

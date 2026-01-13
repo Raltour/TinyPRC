@@ -2,6 +2,8 @@
 #include "calculate_service.pb.h"
 #include "echo_service.pb.h"
 
+// #include <memory>
+
 class CalculateServiceImpl : public rpc::CalculateService {
  public:
   void Add(google::protobuf::RpcController* controller,
@@ -29,8 +31,8 @@ class EchoServiceImpl : public rpc::EchoService {
 int main() {
   RpcServer rpc_server;
 
-  rpc_server.ServiceRegister(new EchoServiceImpl());
-  rpc_server.ServiceRegister(new CalculateServiceImpl());
+  rpc_server.ServiceRegister(std::make_unique<EchoServiceImpl>());
+  rpc_server.ServiceRegister(std::make_unique<CalculateServiceImpl>());
 
   rpc_server.StartServer();
 

@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 namespace {
 
 spdlog::level::level_enum ToSpdlogLevel(int level) {
-  // 约定（你 XML 里只要遵守即可）
+  // 约定
   // 0=trace, 1=debug, 2=info, 3=warn, 4=error, 5=critical, 6=off
   switch (level) {
     case 0: return spdlog::level::trace;
@@ -27,6 +27,7 @@ spdlog::level::level_enum ToSpdlogLevel(int level) {
 }
 
 } // anonymous namespace
+
 void Logger::InitFromConfig(const Config& config) {
   static bool initialized = false;
   if (initialized) return;

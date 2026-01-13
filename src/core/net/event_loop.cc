@@ -22,7 +22,7 @@ EventLoop::EventLoop() : stopped_(false) {
   wakeup_channel->set_handle_read([this] {
     uint64_t one;
     int ret = read(wakeup_fd_, &one, sizeof(one));
-    LOG_INFO("Signal: Stoping Loop");
+    // LOG_INFO("Signal: Stoping Loop");
     stopped_ = true;
   });
 
@@ -34,7 +34,7 @@ EventLoop::EventLoop() : stopped_(false) {
 }
 
 void EventLoop::Loop() {
-  LOG_INFO("EventLoop start looping");
+  // LOG_INFO("EventLoop start looping");
   while (!stopped_) {
     int ret = poller_.poll(-1);
     if (ret < 0) {
@@ -56,7 +56,7 @@ void EventLoop::Loop() {
       }
     }
   }
-  LOG_INFO("EventLoop finish looping");
+  // LOG_INFO("EventLoop finish looping");
 }
 
 void EventLoop::AddChannel(Channel* channel) {

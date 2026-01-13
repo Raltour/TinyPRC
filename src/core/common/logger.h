@@ -35,9 +35,9 @@ class Logger {
 
 // 定义宏，自动填入文件名和行号
 // 使用spdlog的格式化日志宏
-#define LOG_DEBUG(...) SPDLOG_DEBUG(__VA_ARGS__)
-#define LOG_INFO(...) SPDLOG_INFO(__VA_ARGS__)
-#define LOG_WARN(...) SPDLOG_WARN(__VA_ARGS__)
-#define LOG_ERROR(...) SPDLOG_ERROR(__VA_ARGS__)
+// #define LOG_DEBUG(...) SPDLOG_DEBUG(__VA_ARGS__)
+// #define LOG_INFO(...) SPDLOG_INFO(__VA_ARGS__)
+// #define LOG_WARN(...) SPDLOG_WARN(__VA_ARGS__)
+// #define LOG_ERROR(...) SPDLOG_ERROR(__VA_ARGS__)
 
 #endif  // PHOTONRPC_LOGGER_H

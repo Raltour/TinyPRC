@@ -46,11 +46,15 @@ void RpcServer::HandleRequest(std::string& request, std::string& response) {
   service->CallMethod(method_desc, nullptr, method_request, method_response,
                       nullptr);
 
+
   rpc::RpcMessage response_message;
   response_message.set_id(request_message.id());
   response_message.set_type(rpc::RPC_TYPE_RESPONSE);
   response_message.set_response(method_response->SerializeAsString());
   response_message.SerializeToString(&response);
+
+  delete method_request;
+  delete method_response;
 
   // LOG_DEBUG("Send response: \n" + response_message.DebugString());
 }

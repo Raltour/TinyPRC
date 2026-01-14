@@ -14,7 +14,8 @@ class RpcChannel : public google::protobuf::RpcChannel {
                   google::protobuf::Closure* done) override;
 
  private:
-  RpcClient* rpc_client_ = new RpcClient();
+  std::unique_ptr<RpcClient> rpc_client_ = std::make_unique<RpcClient>();
+  // RpcClient* rpc_client_ = new RpcClient();
 };
 
 #endif  //PHOTONRPC_RPC_CHANNEL_H

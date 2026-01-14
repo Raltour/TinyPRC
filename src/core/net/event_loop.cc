@@ -36,6 +36,9 @@ EventLoop::EventLoop()
   signal(SIGTERM, stop_signal_handler);
   event_loop = this;
 }
+EventLoop::~EventLoop() {
+  close(wakeup_fd_);
+}
 
 void EventLoop::Loop() {
   // LOG_INFO("EventLoop start looping");

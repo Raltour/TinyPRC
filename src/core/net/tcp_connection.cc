@@ -21,7 +21,7 @@ void TcpConnection::set_close_callback(
 }
 
 void TcpConnection::HandleRead() {
-  if (input_buffer_.ReceiveFd(channel_.event()->data.fd)) {
+  if (input_buffer_.ReceiveFd(channel_.fd())) {
     std::string decoded_data;
     while ((decoded_data = Codec::decode(input_buffer_.PeekData(),
                                          input_buffer_.GetSize()))
@@ -35,13 +35,14 @@ void TcpConnection::HandleRead() {
       std::string encoded_data = Codec::encode(response_data);
       output_buffer_.WriteData(encoded_data, encoded_data.size());
       // TODO: Improve the performance here.
-      while (!output_buffer_.SendFd(channel_.event()->data.fd)) {}
+      while (!output_buffer_.SendFd(channel_.fd())) {}
       decoded_data.clear();
     }
   } else {
     // LOG_INFO("TcpConnection(fd:{}) closed",
     //          static_cast<int>(channel_.event()->data.fd));
-    close(channel_.event()->data.fd);
+    // close(channel_.event()->data.fd);
+    close_callback_(&channel_);
   }
 }
 

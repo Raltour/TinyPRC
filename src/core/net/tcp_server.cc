@@ -10,16 +10,23 @@ void TcpServer::SetUpTcpServer(
   });
 
   acceptor_.set_new_connection_callback([this, service](int connect_fd) {
-    fd_connection_map_.insert(
-        {connect_fd, std::make_unique<TcpConnection>(
+    auto tcp_connection = std::make_unique<TcpConnection>(
                          connect_fd, service, [this](Channel* channel) {
                            event_loop_.AddChannel(channel);
-                         })});
-    fd_connection_map_.find(connect_fd)
-        ->second->set_close_callback([this](Channel* channel) {
-          this->event_loop_.RemoveChannel(channel);
-          this->fd_connection_map_.erase(channel->event()->data.fd);
-        });
+                         });
+    tcp_connection->set_close_callback([this, service](Channel* channel) {
+      event_loop_.RemoveChannel(channel);
+      close(channel->fd());
+      fd_connection_map_.erase(channel->fd());
+    });
+
+    fd_connection_map_.insert({connect_fd, std::move(tcp_connection)});
+
+    // fd_connection_map_.find(connect_fd)
+    //     ->second->set_close_callback([this](Channel* channel) {
+    //       this->event_loop_.RemoveChannel(channel);
+    //       this->fd_connection_map_.erase(channel->event()->data.fd);
+    //     });
     // LOG_INFO("TcpServer created new TcpConnection for fd: {}", connect_fd);
   });
 

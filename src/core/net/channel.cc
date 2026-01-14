@@ -1,5 +1,7 @@
 #include "channel.h"
 
+#include <unistd.h>
+
 Channel::Channel(const int fd, bool read_event, bool write_event) {
   event_.data.fd = fd;
   if (read_event) {
@@ -12,6 +14,9 @@ Channel::Channel(const int fd, bool read_event, bool write_event) {
 
 epoll_event* Channel::event() {
   return &event_;
+}
+int Channel::fd() const {
+  return event_.data.fd;
 }
 
 void Channel::set_handle_read(std::function<void()> read_callback) {

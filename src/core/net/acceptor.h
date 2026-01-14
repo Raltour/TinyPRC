@@ -9,6 +9,8 @@ class Acceptor {
 
   void StartListen();
 
+  ~Acceptor();
+
   void set_new_connection_callback(std::function<void(int)> callback);
 
   void set_start_listen_callback(std::function<void(Channel*)> callback);

@@ -21,18 +21,18 @@ int Poller::poll(int timeout) {
 }
 
 void Poller::RegisterChannel(Channel* channel) {
-  int fd = channel->event()->data.fd;
+  int fd = channel->fd();
   this->fd_channel_map_.emplace(fd, channel);
 
-  epoll_ctl(this->epoll_fd_, EPOLL_CTL_ADD, channel->event()->data.fd,
+  epoll_ctl(this->epoll_fd_, EPOLL_CTL_ADD, channel->fd(),
             channel->event());
 }
 
 void Poller::RemoveChannel(Channel* channel) {
-  int fd = channel->event()->data.fd;
+  int fd = channel->fd();
   this->fd_channel_map_.erase(fd);
 
-  epoll_ctl(this->epoll_fd_, EPOLL_CTL_DEL, channel->event()->data.fd,
+  epoll_ctl(this->epoll_fd_, EPOLL_CTL_DEL, channel->fd(),
             channel->event());
 }
 

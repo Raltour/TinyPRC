@@ -7,6 +7,8 @@ class EventLoop {
  public:
   EventLoop();
 
+  ~EventLoop();
+
   void Loop();
 
   void AddChannel(Channel* channel);

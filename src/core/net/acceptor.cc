@@ -69,6 +69,9 @@ void Acceptor::StartListen() {
 
   this->start_listen_callback_(&listen_channel);
 }
+Acceptor::~Acceptor() {
+  close(listenfd_);
+}
 
 void Acceptor::set_new_connection_callback(std::function<void(int)> callback) {
   new_connection_callback_ = callback;

@@ -14,6 +14,8 @@ class Channel {
 
   epoll_event* event();
 
+  int fd() const;
+
   void set_handle_read(std::function<void()> read_callback);
 
   void set_handle_write(std::function<void()> write_callback);

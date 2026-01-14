@@ -15,9 +15,13 @@ void RpcServer::StartServer() {
   tcp_server_.RunLoop();
 }
 
-void RpcServer::ServiceRegister(
-    std::unique_ptr<google::protobuf::Service> service) {
-  service_map_.emplace(service->GetDescriptor()->name(), std::move(service));
+// void RpcServer::ServiceRegister(
+//     std::unique_ptr<google::protobuf::Service> service) {
+//   service_map_.emplace(service->GetDescriptor()->name(), std::move(service));
+// }
+
+void RpcServer::ServiceRegister(google::protobuf::Service* service) {
+  service_map_.emplace(service->GetDescriptor()->name(), service);
 }
 
 void RpcServer::HandleRequest(std::string& request, std::string& response) {
@@ -35,7 +39,8 @@ void RpcServer::HandleRequest(std::string& request, std::string& response) {
     return;
   }
 
-  auto service = service_map_.find(request_message.service_name())->second.get();
+  auto service = service_map_.find(request_message.service_name())->second;
+  // auto service = service_map_.find(request_message.service_name())->second.get();
   auto service_desc = service->GetDescriptor();
   auto method_desc =
       service_desc->FindMethodByName(request_message.method_name());
@@ -80,7 +85,9 @@ bool RpcServer::CheckRequest(rpc::RpcMessage request) {
     // LOG_ERROR("Service not found: " + request.service_name());
     return false;
   }
-  auto service = service_map_.find(request.service_name())->second.get();
+
+  auto service = service_map_.find(request.service_name())->second;
+  // auto service = service_map_.find(request.service_name())->second.get();
   // if (service == nullptr) {
   //   LOG_ERROR("Service not found: " + request.service_name());
   //   return false;

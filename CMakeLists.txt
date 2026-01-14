@@ -14,6 +14,11 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} --coverage")
 endif()
 
+if (ENABLE_ASAN)
+    message(STATUS "build with ASAN")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+endif ()
+
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 

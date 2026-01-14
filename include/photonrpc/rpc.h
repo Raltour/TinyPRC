@@ -13,7 +13,8 @@ class RpcServer {
 
   void StartServer();
 
-  void ServiceRegister(std::unique_ptr<google::protobuf::Service>);
+  // void ServiceRegister(std::unique_ptr<google::protobuf::Service>);
+  void ServiceRegister(google::protobuf::Service*);
 };
 
 #endif  //PHOTONRPC_RPC_H

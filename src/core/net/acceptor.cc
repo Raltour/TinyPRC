@@ -10,6 +10,8 @@
 #include <string.h>
 #include <sys/socket.h>
 
+#include <utility>
+
 Acceptor::Acceptor() {}
 
 void Acceptor::StartListen() {
@@ -74,10 +76,10 @@ Acceptor::~Acceptor() {
 }
 
 void Acceptor::set_new_connection_callback(std::function<void(int)> callback) {
-  new_connection_callback_ = callback;
+  new_connection_callback_ = std::move(callback);
 }
 
 void Acceptor::set_start_listen_callback(
     std::function<void(Channel*)> callback) {
-  start_listen_callback_ = callback;
+  start_listen_callback_ = std::move(callback);
 }

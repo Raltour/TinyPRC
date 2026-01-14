@@ -1,7 +1,7 @@
 #include "rpc_channel.h"
-#include "photonrpc/rpc_message.pb.h"
 #include "../common/config.h"
 #include "../net/codec.h"
+#include "photonrpc/rpc_message.pb.h"
 
 #include <arpa/inet.h>
 #include <assert.h>
@@ -19,22 +19,6 @@ void RpcChannel::CallMethod(const google::protobuf::MethodDescriptor* method,
                             const google::protobuf::Message* request,
                             google::protobuf::Message* response,
                             google::protobuf::Closure* done) {
-  const char* ip = Config::GetInstance().server_host().c_str();
-  int port = Config::GetInstance().server_port();
-
-  struct sockaddr_in server_address;
-  bzero(&server_address, sizeof(server_address));
-  server_address.sin_family = AF_INET;
-  inet_pton(AF_INET, ip, &server_address.sin_addr);
-  server_address.sin_port = htons(port);
-
-  int sockfd = socket(PF_INET, SOCK_STREAM, 0);
-  assert(sockfd >= 0);
-
-  if (connect(sockfd, (struct sockaddr*)&server_address,
-              sizeof(server_address)) < 0) {
-    printf("error!\n");
-  }
 
   rpc::RpcMessage rpc_message;
   rpc_message.set_id(1);
@@ -45,16 +29,17 @@ void RpcChannel::CallMethod(const google::protobuf::MethodDescriptor* method,
   std::string message = rpc_message.SerializeAsString();
 
   std::string encoded_message = Codec::encode(message);
-  send(sockfd, encoded_message.c_str(), encoded_message.size(), 0);
+  rpc_client_->SendMessage(encoded_message);
 
   char buffer[1024];
-  int read_size = recv(sockfd, buffer, 1024, 0);
+  int read_size = rpc_client_->ReceiveMessage(buffer, 1024);
+  if (read_size <= 0 || read_size >= 1024) {
+    return;
+  }
   buffer[read_size] = '\0';
   // TODO: Remove the magic number 4 here.
   std::string recv_data = std::string(buffer + 4);
 
   rpc_message.ParseFromString(recv_data);
   response->ParseFromString(rpc_message.response());
-
-  close(sockfd);
 }

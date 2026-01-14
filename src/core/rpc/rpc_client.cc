@@ -1,5 +1,5 @@
-#include "common/config.h"
 #include "rpc_client.h"
+#include "common/config.h"
 
 #include <arpa/inet.h>
 #include <assert.h>
@@ -12,13 +12,15 @@
 #include <cstring>
 #include <iostream>
 
-
 RpcClient::RpcClient() : sockfd_(-1) {
-    ConnectToServer();
+  ConnectToServer();
 }
 
 RpcClient::~RpcClient() {
-  close(sockfd_);
+  if (sockfd_ >= 0) {
+    close(sockfd_);
+    sockfd_ = -1;
+  }
 }
 
 void RpcClient::ConnectToServer() {
@@ -36,16 +38,19 @@ void RpcClient::ConnectToServer() {
 
   if (connect(sockfd_, (struct sockaddr*)&server_address,
               sizeof(server_address)) < 0) {
-    printf("error!\n");
+    printf("ConnectToServer error!\n");
+    close(sockfd_);
+    sockfd_ = -1;
   }
-
 }
 
 void RpcClient::SendMessage(const std::string& message) {
-    send(sockfd_, message.c_str(), message.size(), 0);
+  if (send(sockfd_, message.c_str(), message.size(), 0) <= 0) {
+    printf("SendMessage error!\n");
+  }
 }
 
 int RpcClient::ReceiveMessage(char* buffer, int size) {
-    int read_size = recv(sockfd_, buffer, size, 0);
-    return read_size;
+  int read_size = recv(sockfd_, buffer, size, 0);
+  return read_size;
 }

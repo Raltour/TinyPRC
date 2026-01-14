@@ -21,6 +21,8 @@ class EventLoop {
   bool stopped_;
 
   int wakeup_fd_;
+
+  Channel wakeup_channel_;
 };
 
 #endif  //PHOTONRPC_EVENT_LOOP_H

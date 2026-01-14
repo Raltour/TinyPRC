@@ -16,17 +16,21 @@ void stop_signal_handler(int sig) {
   }
 }
 
-EventLoop::EventLoop() : stopped_(false) {
-  wakeup_fd_ = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
-  Channel* wakeup_channel = new Channel(wakeup_fd_, true, false);
-  wakeup_channel->set_handle_read([this] {
+EventLoop::EventLoop()
+  : stopped_(false), wakeup_fd_(eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC)),
+    wakeup_channel_({wakeup_fd_, true, false}) {
+
+  // wakeup_fd_ = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+  // Channel* wakeup_channel = new Channel(wakeup_fd_, true, false);
+  // wakeup_channel_(wakeup_fd_, true, false);
+  wakeup_channel_.set_handle_read([this] {
     uint64_t one;
     int ret = read(wakeup_fd_, &one, sizeof(one));
     // LOG_INFO("Signal: Stoping Loop");
     stopped_ = true;
   });
 
-  this->AddChannel(wakeup_channel);
+  this->AddChannel(&wakeup_channel_);
 
   signal(SIGINT, stop_signal_handler);
   signal(SIGTERM, stop_signal_handler);

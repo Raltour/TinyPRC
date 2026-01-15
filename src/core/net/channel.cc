@@ -3,6 +3,7 @@
 #include <unistd.h>
 
 Channel::Channel(const int fd, bool read_event, bool write_event) {
+  event_ = {};
   event_.data.fd = fd;
   if (read_event) {
     event_.events = EPOLLIN;
@@ -28,9 +29,13 @@ void Channel::set_handle_write(std::function<void()> write_callback) {
 }
 
 void Channel::HandleRead() {
-  this->read_callback_();
+  if (read_callback_) {
+    this->read_callback_();
+  }
 }
 
 void Channel::HandleWrite() {
-  this->write_callback_();
+  if (write_callback_) {
+    this->write_callback_();
+  }
 }

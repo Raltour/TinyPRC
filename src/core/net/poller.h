@@ -8,10 +8,13 @@
 
 #include <map>
 #include <vector>
+#include <array>
 
 class Poller {
  public:
   Poller();
+
+  ~Poller();
 
   int poll(int timeout);
 
@@ -19,13 +22,15 @@ class Poller {
 
   void RemoveChannel(Channel* channel);
 
+  // std::vector<epoll_event>& get_return_events();
   epoll_event* get_return_events();
 
   Channel* get_channel_by_fd(int fd);
 
  private:
   // std::vector<epoll_event> return_events_;
-  epoll_event return_events_[MAX_EVENT_NUMBER];
+  // epoll_event return_events_[MAX_EVENT_NUMBER];
+  std::array<epoll_event, MAX_EVENT_NUMBER> return_events_;
   std::map<int, Channel*> fd_channel_map_;
   int epoll_fd_;
 };

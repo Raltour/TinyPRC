@@ -1,14 +1,31 @@
 #include "poller.h"
+
+#include <iostream>
+#include <cstdio>
+#include <cerrno>
+#include <unistd.h>
+
 #include "../common/logger.h"
 
-Poller::Poller() {
-  this->epoll_fd_ = epoll_create(MAX_EVENT_NUMBER);
-  this->fd_channel_map_.clear();
+// Poller::Poller() : return_events_(MAX_EVENT_NUMBER), epoll_fd_(epoll_create(MAX_EVENT_NUMBER)) {
+Poller::Poller() : epoll_fd_(epoll_create(MAX_EVENT_NUMBER)) {
+  if (this->epoll_fd_ == -1) {
+    perror("epoll_create failed");
+  }
+}
+
+Poller::~Poller() {
+  if (epoll_fd_ != -1) {
+    close(epoll_fd_);
+  }
 }
 
 int Poller::poll(int timeout) {
-  int ret = epoll_wait(this->epoll_fd_, this->return_events_, MAX_EVENT_NUMBER,
+  int ret = epoll_wait(this->epoll_fd_, this->return_events_.data(), MAX_EVENT_NUMBER,
                        timeout);
+  // int ret = epoll_wait(this->epoll_fd_, this->return_events_.data(), MAX_EVENT_NUMBER,
+  //                      timeout);
+
   if (ret < 0) {
     if (errno == EINTR) {
       // LOG_DEBUG("poll error: EINTR, continue");
@@ -22,10 +39,13 @@ int Poller::poll(int timeout) {
 
 void Poller::RegisterChannel(Channel* channel) {
   int fd = channel->fd();
-  this->fd_channel_map_.emplace(fd, channel);
 
-  epoll_ctl(this->epoll_fd_, EPOLL_CTL_ADD, channel->fd(),
-            channel->event());
+  if (epoll_ctl(this->epoll_fd_, EPOLL_CTL_ADD, channel->fd(),
+            channel->event()) == -1) {
+    perror("epoll_ctl add channel failed");
+  }
+
+  this->fd_channel_map_.emplace(fd, channel);
 }
 
 void Poller::RemoveChannel(Channel* channel) {
@@ -36,8 +56,11 @@ void Poller::RemoveChannel(Channel* channel) {
             channel->event());
 }
 
+// std::vector<epoll_event>& Poller::get_return_events() {
+//   return this->return_events_;
+// }
 epoll_event* Poller::get_return_events() {
-  return this->return_events_;
+  return this->return_events_.data();
 }
 
 Channel* Poller::get_channel_by_fd(int fd) {

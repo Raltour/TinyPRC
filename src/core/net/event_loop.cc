@@ -49,11 +49,22 @@ void EventLoop::Loop() {
     }
 
     epoll_event* result = poller_.get_return_events();
+    // std::vector<epoll_event>& result = poller_.get_return_events();
 
+    if (ret > MAX_EVENT_NUMBER) {
+      ret = MAX_EVENT_NUMBER;
+      printf("Error: ret > MAX\n");
+    }
     for (int i = 0; i < ret; i++) {
+      // int sockfd = result.at(i).data.fd;
+      // int event_flag = result.at(i).events;
       int sockfd = result[i].data.fd;
       int event_flag = result[i].events;
       Channel* channel = poller_.get_channel_by_fd(sockfd);
+
+      if (channel == nullptr) {
+        continue;
+      }
 
       if (event_flag & EPOLLIN) {
         channel->HandleRead();

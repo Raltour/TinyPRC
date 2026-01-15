@@ -17,7 +17,8 @@ void TcpServer::SetUpTcpServer(
     tcp_connection->set_close_callback([this, service](Channel* channel) {
       event_loop_.RemoveChannel(channel);
       close(channel->fd());
-      fd_connection_map_.erase(channel->fd());
+      // TODO: remove tcp_connectin from map.
+      // fd_connection_map_.erase(channel->fd());
     });
 
     fd_connection_map_.insert({connect_fd, std::move(tcp_connection)});

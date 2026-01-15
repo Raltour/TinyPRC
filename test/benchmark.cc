@@ -4,16 +4,27 @@
 #include <atomic>
 #include <chrono>
 #include <iostream>
+#include <memory>
 #include <thread>
+#include <vector>
 
-#define NUM_OF_THREADS 8
-#define NUM_OF_REQUESTS_PER_THREAD 1000
+#define NUM_OF_THREADS 4
+#define NUM_OF_CLIENT_PER_THREADS 10
+#define NUM_OF_REQUESTS_PER_CLIENT 100
 
 std::atomic<int> request_count(0);
 
 void thread_func() {
-  RpcChannel channel;
-  rpc::CalculateService_Stub calculate_service_stub(&channel);
+  std::vector<std::unique_ptr<RpcChannel>> channels;
+  std::vector<std::unique_ptr<rpc::CalculateService_Stub>> calculate_service_stubs;
+  for (int i = 0; i < NUM_OF_CLIENT_PER_THREADS; ++i) {
+    channels.emplace_back(std::make_unique<RpcChannel>());
+    calculate_service_stubs.emplace_back(
+        std::make_unique<rpc::CalculateService_Stub>(channels.back().get()));
+  }
+
+  // RpcChannel channel;
+  // rpc::CalculateService_Stub calculate_service_stub(&channel);
 
   int arg1 = 5;
   int arg2 = 6;
@@ -22,9 +33,11 @@ void thread_func() {
   add_request.set_a(arg1);
   add_request.set_b(arg2);
 
-  for (int i = 0; i < NUM_OF_REQUESTS_PER_THREAD; i++) {
-    calculate_service_stub.Add(nullptr, &add_request, &add_response, nullptr);
-    request_count++;
+  for (int i = 0; i < NUM_OF_REQUESTS_PER_CLIENT; i++) {
+    for (auto& stub : calculate_service_stubs) {
+      stub->Add(nullptr, &add_request, &add_response, nullptr);
+      ++request_count;
+    }
   }
 }
 

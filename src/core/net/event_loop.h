@@ -1,6 +1,8 @@
 #ifndef PHOTONRPC_EVENT_LOOP_H
 #define PHOTONRPC_EVENT_LOOP_H
 
+#include <queue>
+
 #include "poller.h"
 
 class EventLoop {
@@ -17,6 +19,8 @@ class EventLoop {
 
   void WakeUp();
 
+  std::queue<std::function<void(int)>> work_queue_;
+
  private:
   Poller poller_;
 
@@ -25,6 +29,7 @@ class EventLoop {
   int wakeup_fd_;
 
   Channel wakeup_channel_;
+
 };
 
 #endif  //PHOTONRPC_EVENT_LOOP_H

@@ -21,6 +21,9 @@ void TcpServer::SetUpTcpServer(
       // fd_connection_map_.erase(channel->fd());
     });
 
+    if (fd_connection_map_.contains(connect_fd)) {
+      fd_connection_map_.erase(connect_fd);
+    }
     fd_connection_map_.insert({connect_fd, std::move(tcp_connection)});
 
     // fd_connection_map_.find(connect_fd)
